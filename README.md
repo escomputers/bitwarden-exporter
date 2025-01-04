@@ -6,8 +6,9 @@ So the purpose of this repository is to provide the simplest and fastest solutio
 This is especially aimed at those who are not "tech-savvy," meaning non-technical users outside the IT world.
 
 ### Description
-Once you run below steps, you'll have a scheduled task on your Windows PC, running daily at 2pm, exporting the entire vault to a Desktop folder named "bitwarden-exports".
-Vault backups are JSON files encrypted with a custom password, so they can be imported into a new/different account.
+Once you run below steps, you'll have a scheduled task on your Windows PC, running daily at 2pm, exporting the entire vault to a Desktop folder named `bitwarden-exports`.\
+Vault backups are JSON files encrypted with a custom password, so they can be imported into a new/different account.\
+You can change task's schedule according to your liking, by opening the Task Scheduler and selecting the properties of the task named `BackupBWVaultTask`.
 
 ### One time tasks
 1. Install [Powershell > 5.0](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows)
