@@ -12,7 +12,7 @@ Vault backups are JSON files encrypted with a custom password, so they can be im
 ### One time tasks
 1. Install [Powershell > 5.0](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows)
 
-2. Install [Bitwarden CLI](https://bitwarden.com/help/cli/#download-and-install). If you need to install it, open Powershell and run:
+2. Install [Bitwarden CLI](https://bitwarden.com/help/cli/#download-and-install). If you don't know how to do that, open Powershell and run:
 ```powershell
 # First
 .\utils\choco_install.ps1
@@ -20,6 +20,7 @@ Vault backups are JSON files encrypted with a custom password, so they can be im
 # Then
 choco install bitwarden-cli
 ```
+Bear in mind, that if you choose the native executable installation method, you also have to set the proper System Path, otherwise the script won't work at all
 
 3. [Get Bitwarden API credentials](https://bitwarden.com/help/personal-api-key/#get-your-personal-api-key)
 
