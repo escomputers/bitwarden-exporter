@@ -1,4 +1,26 @@
-﻿# Function to check and install a module if not present
+﻿# Constants
+$timestamp = Get-Date -Format "yyyyMMddHHmmss"
+$TaskName = "BackupBWVaultTask"
+$ScriptPath = "$PSCommandPath"
+
+# Define the Desktop path and ExportPath
+$DesktopPath = [System.Environment]::GetFolderPath("Desktop")
+$ExportFolder = Join-Path -Path $DesktopPath -ChildPath "bitwarden-exports"
+$ExportPath = Join-Path -Path $ExportFolder -ChildPath "bitwarden_encrypted_export_$($timestamp).json"
+
+# Ensure the export folder exists
+if (-not (Test-Path -Path $ExportFolder)) {
+    try {
+        New-Item -ItemType Directory -Path $ExportFolder -Force | Out-Null
+        Write-Output "Folder '$ExportFolder' created successfully."
+    } catch {
+        Write-Error "Failed to create folder '$ExportFolder'. Error: $_"
+        exit 1
+    }
+}
+
+
+# Function to check and install a module if not present
 function EnsureModule {
     param (
         [string]$ModuleName  # Name of the module to check/install
@@ -32,6 +54,59 @@ EnsureModule -ModuleName "CredentialManager"
 if (-not (Get-Command "bw" -ErrorAction SilentlyContinue)) {
     throw "Bitwarden CLI is not installed. Please install it"
 }
+
+
+# Function to create a scheduled task for daily execution at midnight
+function EnsureTaskScheduler {
+    param (
+        [string]$TaskName,
+        [string]$ScriptPath
+    )
+
+    # Check if the task already exists
+    $taskExists = Get-ScheduledTask | Where-Object { $_.TaskName -eq $TaskName }
+
+    if ($null -eq $taskExists) {
+        Write-Output "Creating scheduled task '$TaskName'."
+
+        try {
+            # Create a new task trigger for daily execution at midnight
+            $Trigger = New-ScheduledTaskTrigger -Daily -At 2:00PM
+
+            # Create the action to run the script with PowerShell
+            $Action = New-ScheduledTaskAction `
+                -Execute "powershell.exe" `
+                -Argument "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File `"$ScriptPath`""
+
+            # Create a Settings object for storing Task specific settings
+            $Settings = New-ScheduledTaskSettingsSet `
+                -AllowStartIfOnBatteries `
+                -StartWhenAvailable `
+                -DontStopIfGoingOnBatteries `
+                -WakeToRun `
+                -MultipleInstances IgnoreNew
+
+            # Register the scheduled task
+            Register-ScheduledTask `
+                -TaskName $TaskName  `
+                -Settings $Settings `
+                -Trigger $Trigger `
+                -Action $Action `
+                -Description "Backup Bitwarden Vault"
+
+            Write-Output "Scheduled task '$TaskName' created successfully"
+        } catch {
+            Write-Error "Failed to create scheduled task '$TaskName'. Error: $_"
+            exit 1
+        }
+    } else {
+        Write-Output "Scheduled task '$TaskName' already exists"
+    }
+}
+
+
+# Ensure the task scheduler is set up
+EnsureTaskScheduler -TaskName $TaskName -ScriptPath $ScriptPath
 
 
 # Convert a SecureString to Plain Text
@@ -113,7 +188,8 @@ function BackupBWVault {
     bw export `
         --format encrypted_json `
         --session $SessionToken `
-        --password "$Env:BW_ENC_PASSWORD"
+        --password "$Env:BW_ENC_PASSWORD" `
+        --output $ExportPath
     
     # Logout
     Write-Output "`n"
