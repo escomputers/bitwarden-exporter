@@ -1,5 +1,5 @@
 ### Purpose
-Recently, I learned that many accounts from popular password managers are being unexpectedly and inexplicably deleted.\
+Recently, I learned that many accounts from popular password managers (such as LastPass and 1Password) are being unexpectedly and inexplicably deleted.\
 This, of course, has a devastating and serious impact and should be avoided at all costs.
 
 So the purpose of this repository is to provide the simplest and fastest solution for automatically backing up your Bitwarden vault on Windows devices.  
