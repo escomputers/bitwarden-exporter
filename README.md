@@ -11,7 +11,7 @@ Vault backups are JSON files encrypted with a custom password, so they can be im
 You can change task's schedule according to your liking, by opening the Task Scheduler and selecting the properties of the task named `BackupBWVaultTask`.
 
 ### One time tasks
-1. Install [Powershell > 5.0](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows)
+1. Install [Powershell > 6.0](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows)
 
 2. Install [Bitwarden CLI](https://bitwarden.com/help/cli/#download-and-install). If you don't know how to do that, open Powershell and run:
 ```powershell

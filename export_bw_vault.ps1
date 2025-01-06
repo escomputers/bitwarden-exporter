@@ -75,7 +75,7 @@ function EnsureTaskScheduler {
 
             # Create the action to run the script with PowerShell
             $Action = New-ScheduledTaskAction `
-                -Execute "powershell.exe" `
+                -Execute "pwsh.exe" `
                 -Argument "-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File `"$ScriptPath`""
 
             # Create a Settings object for storing Task specific settings
