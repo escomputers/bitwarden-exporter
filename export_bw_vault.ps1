@@ -56,7 +56,7 @@ if (-not (Get-Command "bw" -ErrorAction SilentlyContinue)) {
 }
 
 
-# Function to create a scheduled task for daily execution at midnight
+# Function to create a scheduled task for daily execution at 2pm
 function EnsureTaskScheduler {
     param (
         [string]$TaskName,
@@ -70,7 +70,7 @@ function EnsureTaskScheduler {
         Write-Output "Creating scheduled task '$TaskName'."
 
         try {
-            # Create a new task trigger for daily execution at midnight
+            # Create a new task trigger for daily execution at 2pm
             $Trigger = New-ScheduledTaskTrigger -Daily -At 2:00PM
 
             # Create the action to run the script with PowerShell
