@@ -171,8 +171,7 @@ function BackupBWVault {
     
     # Get the current vault server
     Write-Output "`n"
-    $ServerOutput = bw config server
-    bw config server $ServerOutput
+    bw config server https://bitwarden.com
     
     # Login
     Write-Output "`n"
